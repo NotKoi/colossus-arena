@@ -37,6 +37,9 @@ function BaseAssignment.Start()
 		if not BaseAssignment.Assign(player) then return end
 		player.CharacterAdded:Connect(function(character)
 			character:WaitForChild("HumanoidRootPart")
+            local humanoid = character:WaitForChild("Humanoid")
+            humanoid.MaxHealth = Config.Player.MaxHealth; humanoid.Health = humanoid.MaxHealth
+            humanoid.WalkSpeed = Config.Player.WalkSpeed; humanoid.UseJumpPower = true; humanoid.JumpPower = Config.Player.JumpPower
 			BaseAssignment.ToBase(player)
 		end)
 		if player.Character then BaseAssignment.ToBase(player) end
