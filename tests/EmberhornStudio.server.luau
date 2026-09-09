@@ -4,7 +4,7 @@ local Ember=require(game.ServerScriptService.Emberhorn)
 local b=Real.Current
 local targets={};local events={};local hitTimes={};local rainTarget
 local function target(id,pos)
- local t={player={UserId=id},root={Position=pos},humanoid={Health=1000},damage=0}
+ local t={player={UserId=id,GetAttribute=function()return nil end},root={Position=pos},humanoid={Health=1000},damage=0}
  t.humanoid.TakeDamage=function(_,amount) t.damage+=amount;table.insert(hitTimes,workspace:GetServerTimeNow()) end
  table.insert(targets,t);return t
 end

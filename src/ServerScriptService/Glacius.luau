@@ -51,6 +51,15 @@ local function arenaTargets(Boss)
 	return targets
 end
 
+local function validOrbTarget(target)
+	return target
+		and target.player.Parent == Players
+		and target.root.Parent ~= nil
+		and target.humanoid.Health > 0
+		and flat(target.root.Position).Magnitude <= D.ArenaRadius
+		and not safeZonePlayer(target.player)
+end
+
 local function randomGround(radiusMargin)
 	local angle = math.random() * math.pi * 2
 	local radius = math.sqrt(math.random()) * (D.ArenaRadius - radiusMargin)
@@ -91,11 +100,12 @@ function Glacius.Build(b)
 	b.orbitConnection = connection
 end
 
-local function spawnShield(b)
+local function spawnShield(b, Boss)
 	if b.shieldTriggered or not b.active then return false end
 	b.shieldTriggered = true
 	b.shielded = true
 	stateShielded(true)
+	if Boss then Boss.Telegraph(b, "Clear", {}) end
 	b.crystals = b.crystals or {}
 	for i = 1, D.Shield.Count do
 		local angle = (i - 1) / D.Shield.Count * math.pi * 2
@@ -118,7 +128,7 @@ end
 
 function Glacius.OnDamaged(b, Boss)
 	if b and Boss.Active(b) and not b.shieldTriggered and b.hp <= b.maxHP * D.ShieldRatio then
-		return spawnShield(b)
+		return spawnShield(b, Boss)
 	end
 	return false
 end
@@ -130,6 +140,7 @@ local function nova(b, Boss)
 	for _ = 1, count do table.insert(positions, randomGround(d.SafeRadius + 4)) end
 	Boss.Telegraph(b, "Nova", { positions = positions, radius = d.SafeRadius, duration = d.Windup, color = D.Model.Cyan, label = "FIND A SAFE CIRCLE" })
 	if not Boss.Wait(b, d.Windup) then return end
+	if b.shielded then return end
 	for _, target in arenaTargets(Boss) do
 		local safe = false
 		for _, position in positions do
@@ -140,6 +151,7 @@ local function nova(b, Boss)
 			local baseSpeed = target.player:GetAttribute("BaseWalkSpeed") or Config.Player.WalkSpeed
 			local token = (target.player:GetAttribute("GlaciusSlowToken") or 0) + 1
 			target.player:SetAttribute("GlaciusSlowToken", token)
+            target.player:SetAttribute("GlaciusSlowUntil", workspace:GetServerTimeNow()+d.SlowDuration)
 			target.humanoid.WalkSpeed = baseSpeed * d.SlowScale
 			task.delay(d.SlowDuration, function()
 				if target.player.Parent == Players and target.humanoid.Parent and target.player:GetAttribute("GlaciusSlowToken") == token then
@@ -161,7 +173,7 @@ local function runOrb(b, Boss, orb, target)
 	local started = workspace:GetServerTimeNow()
 	local last = orb.Position
 	while Boss.Active(b) and orb.Parent and workspace:GetServerTimeNow() - started < d.Lifetime do
-		if not target or not target.root.Parent or target.humanoid.Health <= 0 or safeZonePlayer(target.player) then target = orbTarget(Boss, math.random(1, 99)) end
+		if not validOrbTarget(target) then target = orbTarget(Boss, math.random(1, 99)) end
 		if not target then break end
 		local dt = RunService.Heartbeat:Wait()
 		local delta = target.root.Position - last
@@ -169,7 +181,11 @@ local function runOrb(b, Boss, orb, target)
 		local step = delta.Unit * math.min(d.Speed * dt, delta.Magnitude)
 		local params = RaycastParams.new()
 		params.FilterType = Enum.RaycastFilterType.Exclude
-		params.FilterDescendantsInstances = { b.model, b.effects, orb }
+		local excluded = { b.model, orb }
+		for _, item in b.effects:GetChildren() do
+			if item:IsA("BasePart") and item.Name == "HomingOrb" then table.insert(excluded, item) end
+		end
+		params.FilterDescendantsInstances = excluded
 		local hit = workspace:Raycast(last, step, params)
 		if hit then
 			if hit.Instance:IsDescendantOf(target.player.Character) then Boss.Hurt(b, target, d.Damage) end
@@ -212,6 +228,7 @@ local function spawnPillars(b)
 		local angle = (i - 1) / d.PillarCount * math.pi * 2
 		local position = Vector3.new(math.cos(angle) * d.PillarRadius, d.PillarSize.Y / 2, math.sin(angle) * d.PillarRadius)
 		local pillar = effectPart(b.effects, "IcePillar", d.PillarSize, CFrame.new(position) * CFrame.Angles(0, angle, math.rad(8)), D.Model.Ice, Enum.Material.Glass)
+		pillar.CanCollide = true
 		CollectionService:AddTag(pillar, "IcePillar")
 		Debris:AddItem(pillar, d.PillarLifetime)
 		table.insert(pillars, pillar)
@@ -225,10 +242,11 @@ local function sweep(b, Boss)
 	local angle = math.random() * math.pi * 2
 	Boss.Telegraph(b, "Circle", { position = Vector3.new(0, D.GroundY, 0), radius = d.Radius, duration = d.Windup, color = D.Model.Violet, label = "ICE SWEEP" })
 	if not Boss.Wait(b, d.Windup) then return end
+	if b.shielded then return end
 	local started = workspace:GetServerTimeNow()
-	Boss.Telegraph(b, "Beam", { position = Vector3.new(0, D.GroundY, 0), angle = angle, duration = d.Duration, radius = d.Radius, width = d.Width, color = D.Model.Cyan })
+	Boss.Telegraph(b, "Beam", { start = started, position = Vector3.new(0, D.GroundY, 0), angle = angle, duration = d.Duration, radius = d.Radius, width = d.Width, color = D.Model.Cyan })
 	local lastDamage = {}
-	while Boss.Active(b) do
+	while Boss.Active(b) and not b.shielded do
 		local elapsed = workspace:GetServerTimeNow() - started
 		if elapsed >= d.Duration then break end
 		local beamAngle = angle + elapsed / d.Duration * math.pi * 2
@@ -250,7 +268,7 @@ local function sweep(b, Boss)
 	end
 end
 
-local casts = { Nova = nova, Orbs = orbs, Sweep = sweep, Shield = function(b) spawnShield(b) end }
+local casts = { Nova = nova, Orbs = orbs, Sweep = sweep, Shield = spawnShield }
 
 function Glacius.Cast(b, Boss, name)
 	local cast = casts[name]

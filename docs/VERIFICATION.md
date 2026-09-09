@@ -11,3 +11,5 @@
 - User-requested interim push: combat checkpoints1-5 verified; Emberhorn, Glacius, telegraph rendering and economy source are in progress and are not yet fully runtime verified.
 
 - Checkpoint 6: manual server fixtures passed Emberhorn slam radius/timing, three ring waves (75 grounded/0 jumping), charge line sidestep/stun, meteor timing and safe-zone exclusion. Runtime enrage trigger passed. Client capture shows ground warning before slam and bull-golem model. Console clean.
+
+- Checkpoint 7: Glacius mandatory50% shield cap, immunity, four800HP crystals, contribution ledger and4s stun passed. Nova safe/outside/base geometry,1.8s preview, slow expiry and two-circle enrage passed. Sweep hit exposed target and protected pillar shadow. Orb tests passed obstacle shatter, three35-damage hits and safe-zone retreat. First orb assertion was corrected to observe damage because Roblox auto-regeneration changes final HP. Clean rerun console. Shared ring/beam timestamps now identical in server and client packet.

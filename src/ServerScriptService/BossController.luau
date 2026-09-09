@@ -5,6 +5,7 @@ local Debris = game:GetService("Debris")
 local CollectionService = game:GetService("CollectionService")
 local Config = require(RS.Modules.Config)
 local Defs = require(RS.Modules.BossDefs)
+local IceDefs = require(RS.Modules.GlaciusDefs)
 local Remotes = require(script.Parent.Remotes)
 local Boss = { Current = nil, Cycle = 0 }
 local state
@@ -25,10 +26,11 @@ function Boss.ArenaPlayers()
  return list
 end
 function Boss.Telegraph(b, kind, data)
- data.kind=kind; data.cycle=b.cycle; data.start=workspace:GetServerTimeNow(); Remotes.Telegraph:FireAllClients(data)
+ data.kind=kind; data.cycle=b.cycle; data.start=data.start or workspace:GetServerTimeNow(); Remotes.Telegraph:FireAllClients(data)
 end
 function Boss.Hurt(b, target, amount, knockback)
  if not Boss.Active(b) then return end
+ if target.player:GetAttribute("InSafeZone") or target.player:GetAttribute("SafeZone") then return end
  local root=target.root
  if Vector3.new(root.Position.X,0,root.Position.Z).Magnitude > Config.Map.ArenaRadius then return end
  target.humanoid:TakeDamage(amount)
@@ -39,18 +41,20 @@ function Boss.Damage(player, model, amount)
  if not b or not Boss.Active(b) or not model or model:GetAttribute("Cycle")~=b.cycle then return 0 end
  local crystal = model:GetAttribute("ShieldCrystal")
  if model~=b.model and not (crystal and b.crystals and b.crystals[model]) then return 0 end
+ if model==b.model and Boss.OnDamaged then Boss.OnDamaged(b) end
  if model==b.model and b.shielded then return 0 end
  local hp=model:GetAttribute("HP") or 0
  local dealt=math.min(math.max(amount,0),hp)
+ if model==b.model and b.id=="Glacius" and not b.shieldTriggered then dealt=math.min(dealt,math.max(0,hp-b.maxHP*IceDefs.ShieldRatio)) end
  if dealt<=0 then return 0 end
  model:SetAttribute("HP",hp-dealt)
  b.damage[player.UserId]=(b.damage[player.UserId] or 0)+dealt
  b.names[player.UserId]=player.DisplayName
- if model==b.model then b.hp=hp-dealt; b.bossDamage+=dealt; state:SetAttribute("HP",b.hp)
+ if model==b.model then b.hp=hp-dealt; b.bossDamage+=dealt; state:SetAttribute("HP",b.hp); if Boss.OnDamaged then Boss.OnDamaged(b) end
  else
   if hp-dealt<=0 then
    b.crystals[model]=nil; model:Destroy()
-   if next(b.crystals)==nil then b.shielded=false; b.stunnedUntil=workspace:GetServerTimeNow()+4; state:SetAttribute("Shielded",false) end
+   if next(b.crystals)==nil then b.shielded=false; b.stunnedUntil=workspace:GetServerTimeNow()+IceDefs.Shield.Stun; state:SetAttribute("Shielded",false) end
   end
  end
  Remotes.Damage:FireAllClients(model==b.model and b.root.Position or (model:GetAttribute("Position") or Vector3.zero),dealt,player.UserId)
@@ -91,6 +95,7 @@ function Boss.Start()
    if flat.Magnitude>Config.Map.ArenaRadius-10 then b.model:PivotTo(CFrame.new(flat.Unit*(Config.Map.ArenaRadius-10)+Vector3.new(0,p.Y,0))*b.root.CFrame.Rotation) end
   end
  end)
+ if RunService:IsStudio() and workspace:GetAttribute("ManualBossTests") then Boss.Spawn("Emberhorn"); return end
  task.spawn(function()
   while true do
    local id=Boss.Cycle%2==0 and "Emberhorn" or "Glacius"

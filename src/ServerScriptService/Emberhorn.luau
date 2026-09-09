@@ -138,7 +138,7 @@ local function ringWave(b, Boss, origin, maxRadius)
 	local d = D.Ring
 	local duration = maxRadius / d.Speed
 	local start = workspace:GetServerTimeNow()
-	Boss.Telegraph(b, "Ring", { position = origin, speed = d.Speed, maxRadius = maxRadius, width = d.Width, duration = duration, color = D.Model.Molten })
+	Boss.Telegraph(b, "Ring", { start = start, position = origin, speed = d.Speed, maxRadius = maxRadius, width = d.Width, duration = duration, color = D.Model.Molten })
 	local hit = {}
 	while Boss.Active(b) do
 		local radius = math.min(maxRadius, (workspace:GetServerTimeNow() - start) * d.Speed)
