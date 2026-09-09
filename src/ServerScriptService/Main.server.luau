@@ -8,6 +8,9 @@ Boss.BuildModel = function(b) if b.id == "Emberhorn" then Emberhorn.Build(b) els
 Boss.RunAbilities = function(b) if b.id == "Emberhorn" then Emberhorn.Run(b, Boss) else Glacius.Run(b, Boss) end end
 Boss.OnDamaged = function(b) if b.id == "Glacius" then Glacius.OnDamaged(b, Boss) end end
 if game:GetService("RunService"):IsStudio() and workspace:GetAttribute("ManualBossTests") then Boss.RunAbilities = nil end
-require(script.Parent.CombatService).Start(Boss)
+local Data = require(script.Parent.DataService)
+Data.Start()
+require(script.Parent.LootService).Start(Boss)
+require(script.Parent.CombatService).Start(Boss, Data.Get)
 Boss.Start()
-print("Colossus Arena: both bosses ready", #map.Bases:GetChildren())
+print("Colossus Arena: bosses and economy ready", #map.Bases:GetChildren())

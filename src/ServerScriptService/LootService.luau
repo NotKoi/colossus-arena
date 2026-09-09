@@ -12,6 +12,9 @@ function LootService.Payout(b, killed)
  for userId, damage in b.damage do
   table.insert(rows, {userId=userId, name=b.names[userId] or tostring(userId), damage=damage})
  end
+ for _,player in Players:GetPlayers() do
+  if b.damage[player.UserId]==nil then table.insert(rows,{userId=player.UserId,name=player.DisplayName,damage=0}) end
+ end
  table.sort(rows, function(a,b)
   return a.damage > b.damage or (a.damage == b.damage and a.userId < b.userId)
  end)
