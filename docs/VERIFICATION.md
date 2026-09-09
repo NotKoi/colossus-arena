@@ -9,3 +9,5 @@
 - Checkpoint 5: actual equipped Tool.Activate dealt10;20 simultaneous remotes produced only one hit. Forged target/damage request from base changed no HP. Runtime probe passed shield immunity, unknown target rejection, remaining-HP cap, boss damage ledger=8000, death/downtime and post-death rejection. All six sword stats checked against spec with Lune. Console clean.
 
 - User-requested interim push: combat checkpoints1-5 verified; Emberhorn, Glacius, telegraph rendering and economy source are in progress and are not yet fully runtime verified.
+
+- Checkpoint 6: manual server fixtures passed Emberhorn slam radius/timing, three ring waves (75 grounded/0 jumping), charge line sidestep/stun, meteor timing and safe-zone exclusion. Runtime enrage trigger passed. Client capture shows ground warning before slam and bull-golem model. Console clean.
