@@ -1,2 +1,3 @@
 local map = require(script.Parent.MapBuilder).Build()
-print("Colossus Arena: map ready", #map.Bases:GetChildren())
+require(script.Parent.BaseAssignment).Start()
+print("Colossus Arena: map and base assignment ready", #map.Bases:GetChildren())
