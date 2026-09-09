@@ -2,19 +2,23 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
+local Names = require(ReplicatedStorage:WaitForChild("Modules"):WaitForChild("RemoteNames"))
+local boundTools = setmetatable({}, {__mode="k"})
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
-local swingRemote = remotes:WaitForChild("Swing")
-local damageRemote = remotes:WaitForChild("Damage")
+local swingRemote = remotes:WaitForChild(Names.Swing)
+local damageRemote = remotes:WaitForChild(Names.Damage)
 local characterConnections = {}
 
 local function clearConnections()
 	for _, connection in characterConnections do connection:Disconnect() end
 	table.clear(characterConnections)
+    table.clear(boundTools)
 end
 
 local function bindTool(tool)
-	if not tool:IsA("Tool") or not tool:GetAttribute("SwordId") then return end
+	if not tool:IsA("Tool") or not tool:GetAttribute("SwordId") or boundTools[tool] then return end
+    boundTools[tool] = true
 	table.insert(characterConnections, tool.Activated:Connect(function()
 		swingRemote:FireServer()
 	end))

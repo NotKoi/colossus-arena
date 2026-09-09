@@ -7,3 +7,5 @@
 - Checkpoint 4: observed the real 120-second timeout, Emberhorn cleanup and cycle 2 Glacius with 6500 HP. Initial Emberhorn HP 8000 and countdown 0..120 validated. Console clean; all 9 sources compiled with Lune.
 
 - Checkpoint 5: actual equipped Tool.Activate dealt10;20 simultaneous remotes produced only one hit. Forged target/damage request from base changed no HP. Runtime probe passed shield immunity, unknown target rejection, remaining-HP cap, boss damage ledger=8000, death/downtime and post-death rejection. All six sword stats checked against spec with Lune. Console clean.
+
+- User-requested interim push: combat checkpoints1-5 verified; Emberhorn, Glacius, telegraph rendering and economy source are in progress and are not yet fully runtime verified.
