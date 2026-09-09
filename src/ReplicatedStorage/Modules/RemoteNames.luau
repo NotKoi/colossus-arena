@@ -1,0 +1,1 @@
+return { Swing = "Swing", Buy = "Buy", Equip = "Equip", Teleport = "Teleport", Sync = "Sync", Profile = "Profile", Telegraph = "Telegraph", Damage = "Damage", Results = "Results", RareDrop = "RareDrop", Notice = "Notice", OpenShop = "OpenShop" }

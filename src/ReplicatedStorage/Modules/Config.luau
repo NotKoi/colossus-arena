@@ -37,4 +37,8 @@ Config.BaseColors = {
 	Color3.fromRGB(246, 127, 213),
 }
 
+Config.Cycle = { Length = 120, HPPerPlayer = 0.6, CorpseLifetime = 4, TeleportLock = 5, Tick = 0.1 }
+Config.Player = { MaxHealth = 100, WalkSpeed = 24, JumpPower = 50, ArenaArrival = Vector3.new(95, 4, 0) }
+Config.Combat = { Range = 14, SwingWindow = 0.28, RemoteInterval = 0.08, ContactCooldown = 1 }
+Config.Effects = { Lifetime = 3, GroundY = 0.18, RingSegments = 72 }
 return Config
