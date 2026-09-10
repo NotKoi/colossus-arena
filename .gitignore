@@ -13,3 +13,5 @@ DevPackages/
 .env.*
 !.env.example
 .DS_Store
+
+!assets/*.rbxmx

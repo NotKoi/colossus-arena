@@ -1,10 +1,12 @@
 -- Procedural, anchored map. Build is safe to call repeatedly.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Lighting = game:GetService("Lighting")
+local ServerStorage = game:GetService("ServerStorage")
 local Config = require(ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Config"))
 local M = Config.Map
 local MapBuilder = {}
-local sand = Color3.fromRGB(239, 225, 179)
+local sand = Color3.fromRGB(211, 202, 151)
+local mint = Color3.fromRGB(151, 198, 161)
 local teal = Color3.fromRGB(55, 158, 153)
 local gold = Color3.fromRGB(244, 191, 77)
 local grass = Color3.fromRGB(106, 194, 116)
@@ -29,7 +31,7 @@ end
 local function label(parent, text)
 	local gui = Instance.new("BillboardGui")
 	gui.Name = "Label"
-	gui.Size = UDim2.fromOffset(210, 52)
+	gui.Size = UDim2.fromScale(14, 3)
 	gui.StudsOffset = Vector3.new(0, 4, 0)
 	gui.MaxDistance = 180
 	gui.Parent = parent
@@ -45,6 +47,27 @@ local function label(parent, text)
 end
 
 local function tree(parent, pos, scale)
+	local assets = ServerStorage:FindFirstChild("Assets")
+	local template = assets and assets:FindFirstChild("LowPolyTree")
+	if template and template:IsA("Model") then
+		local model = template:Clone()
+		local _, originalSize = model:GetBoundingBox()
+		if originalSize.Y > 0 then
+			model:ScaleTo(model:GetScale() * M.TreeHeight * M.TreeVisualHeightMultiplier * scale / originalSize.Y)
+			local box, size = model:GetBoundingBox()
+			local bottom = box.Position - Vector3.new(0, size.Y / 2, 0)
+			model:PivotTo(model:GetPivot() + (pos - bottom))
+			for _, child in model:GetDescendants() do
+				if child:IsA("BasePart") then
+					child.Anchored, child.CanCollide = true, false
+					child.Color = child.Name == "Foliage" and Color3.fromRGB(72, 163, 91) or Color3.fromRGB(137, 93, 55)
+				end
+			end
+			model.Parent = parent
+			return
+		end
+		model:Destroy()
+	end
 	local h = M.TreeHeight * scale
 	part(parent, "Trunk", Vector3.new(2, h * 0.65, 2) * scale,
 		CFrame.new(pos + Vector3.new(0, h * 0.3, 0)), Color3.fromRGB(123, 91, 66), Enum.Material.Wood)
@@ -63,15 +86,16 @@ local function ring(parent, name, radius, width, height, y, count, color, openin
 		local sector = 360 / M.BaseCount
 		local distance = math.abs((math.deg(a) + sector / 2) % sector - sector / 2)
 		if not openings or distance > M.OpeningHalfAngle then
-			part(parent, name, Vector3.new(width, height, radius * arc + 0.2),
+			local segment = part(parent, name, Vector3.new(width, height, radius * arc + 0.2),
 				CFrame.new(math.cos(a) * radius, y, math.sin(a) * radius) * CFrame.Angles(0, -a, 0), color)
+			if not openings then segment.CanCollide, segment.CanQuery, segment.CanTouch = false, false, false end
 		end
 	end
 end
 
 local function lighting()
 	Lighting.ClockTime = 14.5
-	Lighting.Brightness = 2.5
+	Lighting.Brightness = 2
 	Lighting.Ambient = Color3.fromRGB(126, 151, 157)
 	Lighting.OutdoorAmbient = Color3.fromRGB(154, 177, 178)
 	Lighting.GlobalShadows = true
@@ -99,19 +123,30 @@ end
 
 function MapBuilder.Build()
 	local existing = workspace:FindFirstChild("ColossusMap")
-	if existing then return existing end
+	if existing then lighting(); return existing end
 	local map = Instance.new("Model")
 	map.Name = "ColossusMap"
 	local arena = Instance.new("Model")
 	arena.Name, arena.Parent = "Arena", map
 	disc(arena, "Floor", M.ArenaRadius, M.FloorThickness,
-		Vector3.new(0, M.TopY - M.FloorThickness / 2, 0), sand)
+		Vector3.new(0, M.TopY - M.FloorThickness / 2, 0), mint)
 	disc(arena, "Underside", M.ArenaRadius * 0.94, M.FloorThickness * 2,
 		Vector3.new(0, M.TopY - M.FloorThickness * 1.5, 0), teal)
-	disc(arena, "CenterMedallion", M.CenterRadius, 0.08, Vector3.new(0, M.TopY + 0.04, 0), teal)
-	ring(arena, "Inlay", M.PatternRadius, M.PatternWidth, 0.08, M.TopY + 0.04, M.PatternSegments, gold, false)
+	local function floorArt(name, radius, layer, color, offset)
+		local p = disc(arena, name, radius, M.PatternLayerThickness,
+			(offset or Vector3.zero) + Vector3.new(0, M.TopY + layer * M.PatternLayerStep, 0), color)
+		p.CanCollide, p.CanQuery, p.CanTouch = false, false, false
+		return p
+	end
+	local patternColors = {teal, mint, sand}
+	for layer, radiusFactor in M.FloorPatternRadiusFactors do
+		floorArt("FloorPattern" .. layer, M.ArenaRadius * radiusFactor, layer, patternColors[layer])
+	end
+	floorArt("CenterMedallion", M.CenterRadius, 4, teal)
+	ring(arena, "Inlay", M.PatternRadius, M.PatternWidth, M.PatternLayerThickness,
+		M.TopY + 4 * M.PatternLayerStep, M.PatternSegments, gold, false)
 	ring(arena, "Rim", M.ArenaRadius - M.RimWidth / 2, M.RimWidth, M.RimHeight,
-		M.TopY + M.RimHeight / 2, M.RimSegments, teal, true)
+		M.TopY + M.RimHeight / 2, M.RimSegments, gold, true)
 	local bases = Instance.new("Folder")
 	bases.Name, bases.Parent = "Bases", map
 	for i = 1, M.BaseCount do
@@ -119,6 +154,7 @@ function MapBuilder.Build()
 		local radial = Vector3.new(math.cos(angle), 0, math.sin(angle))
 		local center = radial * M.BaseRadius + Vector3.new(0, M.TopY, 0)
 		local color = Config.BaseColors[i]
+		floorArt("DirectionMedallion" .. i, M.DirectionalMedallionRadius, 4, color, radial * M.DirectionalMedallionDistance)
 		local frame = CFrame.new(center) * CFrame.Angles(0, -angle - math.pi / 2, 0)
 		local base = Instance.new("Model")
 		base.Name = "Base" .. i

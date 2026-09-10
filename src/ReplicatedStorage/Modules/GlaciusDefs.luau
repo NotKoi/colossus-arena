@@ -1,7 +1,7 @@
 local D = {
 	Names = { "Nova", "Orbs", "Sweep", "Shield" },
 	ArenaRadius = 120,
-	GroundY = 0.18,
+	GroundY = 0.35,
 	Cadence = 4.5,
 	EnragedCadence = 3,
 	EnrageRatio = 0.25,

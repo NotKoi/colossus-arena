@@ -1,1 +1,39 @@
-{"name":"Colossus Arena","tree":{"$className":"DataModel","ReplicatedStorage":{"$className":"ReplicatedStorage","Modules":{"$path":"src/ReplicatedStorage/Modules"}},"ServerScriptService":{"$className":"ServerScriptService","$path":"src/ServerScriptService"},"StarterPlayer":{"$className":"StarterPlayer","StarterPlayerScripts":{"$className":"StarterPlayerScripts","$path":"src/StarterPlayer/StarterPlayerScripts"}},"Workspace":{"$className":"Workspace","$properties":{"FilteringEnabled":true,"Gravity":196.2}},"Lighting":{"$className":"Lighting"}}}
+{
+  "name": "Colossus Arena",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "Modules": {
+        "$path": "src/ReplicatedStorage/Modules"
+      }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "$path": "src/ServerScriptService"
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "$path": "src/StarterPlayer/StarterPlayerScripts"
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "FilteringEnabled": true,
+        "Gravity": 196.2
+      }
+    },
+    "Lighting": {
+      "$className": "Lighting"
+    },
+    "ServerStorage": {
+      "$className": "ServerStorage",
+      "Assets": {
+        "$path": "assets"
+      }
+    }
+  }
+}

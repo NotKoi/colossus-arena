@@ -9,7 +9,7 @@ local Remotes = require(script.Parent.Remotes)
 
 local CombatService = {}
 local DEFAULT_SWORD = "WoodenTrainer"
-local SWOOSH_ID = "rbxassetid://12222216"
+local SWOOSH_ID = Config.Audio.Swing
 
 local bossController
 local getProfile
@@ -165,13 +165,13 @@ local function createSwordTool(swordId, def)
 
 	local blade = Instance.new("Part")
 	blade.Name = "Blade"
-	blade.Size = Vector3.new(0.45, 4.6, 0.75)
+	blade.Size = Vector3.new(0.75, 0.45, 4.6)
 	blade.Color = def.Color
 	blade.Material = Enum.Material.Neon
 	blade.CanCollide = false
 	blade.CanTouch = true
 	blade.Massless = true
-	blade.CFrame = handle.CFrame * CFrame.new(0, 2.85, 0)
+	blade.CFrame = handle.CFrame * CFrame.new(0, 1.5, 0) * CFrame.Angles(-math.pi / 2, 0, 0)
 	blade.Parent = tool
 	local mesh = Instance.new("SpecialMesh")
 	mesh.MeshType = Enum.MeshType.FileMesh
@@ -185,10 +185,10 @@ local function createSwordTool(swordId, def)
 	weld.Parent = handle
 
 	local bottom = Instance.new("Attachment")
-	bottom.Position = Vector3.new(0, -blade.Size.Y * 0.5, 0)
+	bottom.Position = Vector3.new(0, 0, -blade.Size.Z * 0.5)
 	bottom.Parent = blade
 	local top = Instance.new("Attachment")
-	top.Position = Vector3.new(0, blade.Size.Y * 0.5, 0)
+	top.Position = Vector3.new(0, 0, blade.Size.Z * 0.5)
 	top.Parent = blade
 	local trail = Instance.new("Trail")
 	trail.Attachment0 = bottom

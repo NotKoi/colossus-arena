@@ -1,6 +1,6 @@
 local D = {
 	Names = { "Slam", "Ring", "Charge", "Rain" },
-	GroundY = 0.18,
+	GroundY = 0.35,
 	ArenaRadius = 120,
 	ArenaMargin = 10,
 	EnrageRatio = 0.30,
