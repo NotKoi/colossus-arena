@@ -23,3 +23,5 @@ Desktop mouse inventory open/close and B shortcut passed. iPhone 14 portrait HUD
 
 ## Checkpoint 11 — polish and final cycle
 Final map overview and phone inventory screenshots inspected. Normal early-kill downtime reached the five-second UI lock, then Glacius spawned and teleport unlocked. Reoriented equipped blade dealt exactly 10 damage. Impact particle emitter creation verified. A diagnostic event initially omitted the required start timestamp; that fixture error was isolated and the final session restarted. Static imported tree is script-free; Rojo build succeeds with the asset included.
+
+Final validation: all 24 Luau sources compile; sword, loot and simulated persistence suites pass. Final Rojo XML contains exactly 24 source scripts and the two audited mesh parts, with no ManualBossTests hooks. Clean restart plus valid timestamped impact packet produced no console warnings/errors; impact anchor cleanup passed.
