@@ -17,3 +17,6 @@
 - Checkpoint 8: runtime economy tests passed starter profile, duplicate500 conversion,750 kill payout for50% first place,375 timeout payout, zero participation and payout idempotence. Pure loot boundary tests pass. Actual DataService source passes simulated-service rejoin/lock/retry/autosave/shutdown/snapshot/sanitation/Sync tests. Unpublished Studio deliberately uses session-only data; live Roblox DataStore rejoin is not verified. Console clean.
 
 - Checkpoint 9: Studio fixture completed shop proximity restriction, exact250-coin Bronze purchase, purchase/equip ownership/rate limits, boss-drop shop rejection, insufficient funds,30HP armor,15% speed, derived81 strength, no toggle-healing, base/arena teleport and final5-second downtime lock. Console reports Shop and inventory runtime tests passed.
+
+## Checkpoint 10 — final HUD
+Desktop mouse inventory open/close and B shortcut passed. iPhone 14 portrait HUD and results screenshots inspected: readable timer/coins/strength, buttons clear of Jump. Scale-only sizing checked. Final normal startup console has no warnings/errors; early-kill fixture confirmed inactive boss retains original deadline and shopping downtime. Production ManualBossTests branches removed. Live multi-client and published DataStore verification remain unavailable.

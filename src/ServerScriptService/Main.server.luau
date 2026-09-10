@@ -7,7 +7,6 @@ local Glacius = require(script.Parent.Glacius)
 Boss.BuildModel = function(b) if b.id == "Emberhorn" then Emberhorn.Build(b) else Glacius.Build(b) end end
 Boss.RunAbilities = function(b) if b.id == "Emberhorn" then Emberhorn.Run(b, Boss) else Glacius.Run(b, Boss) end end
 Boss.OnDamaged = function(b) if b.id == "Glacius" then Glacius.OnDamaged(b, Boss) end end
-if game:GetService("RunService"):IsStudio() and workspace:GetAttribute("ManualBossTests") then Boss.RunAbilities = nil end
 local Data = require(script.Parent.DataService)
 Data.Start()
 require(script.Parent.LootService).Start(Boss)

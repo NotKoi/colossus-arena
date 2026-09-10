@@ -95,7 +95,6 @@ function Boss.Start()
    if flat.Magnitude>Config.Map.ArenaRadius-10 then b.model:PivotTo(CFrame.new(flat.Unit*(Config.Map.ArenaRadius-10)+Vector3.new(0,p.Y,0))*b.root.CFrame.Rotation) end
   end
  end)
- if RunService:IsStudio() and workspace:GetAttribute("ManualBossTests") then Boss.Spawn("Emberhorn"); return end
  task.spawn(function()
   while true do
    local id=Boss.Cycle%2==0 and "Emberhorn" or "Glacius"
