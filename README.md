@@ -1,6 +1,6 @@
 # Colossus Arena
 
-Colossus Arena is a complete six-player Roblox boss-rush game. Each player receives a colored floating base connected to a shared 120-stud arena, fights alternating two-minute colossi, earns coins from contribution, and upgrades swords and armor.
+Colossus Arena is a complete six-player Roblox boss-rush game. Each player receives a colored outpost connected to a shared 120-stud arena, fights alternating two-minute colossi, earns coins from contribution, and upgrades swords and armor.
 
 The server assigns bases, validates melee and shop requests, controls bosses and damage, calculates rewards, and owns profile persistence. The responsive client HUD renders warnings, boss state, results, inventory, feedback, sound, particles, and camera impact.
 
@@ -8,7 +8,7 @@ The server assigns bases, validates melee and shop requests, controls bosses and
 
 - Move and jump with standard Roblox controls.
 - Click or tap with the equipped sword to attack.
-- Press `B` to open or close the inventory. On touch devices, use **PACK**.
+- Press `B` to open or close the inventory. On touch devices, use **Inventory**.
 - Press `T` to travel between your base and the arena. On touch devices, use the destination button.
 - Use an **UPGRADES** kiosk to buy swords. The server requires the player to be alive and physically near a kiosk.
 
@@ -70,7 +70,7 @@ The arena uses procedural anchored geometry and an audited low-poly tree under `
 
 ## Verification
 
-All 24 source files compile. Automated checks cover the six exact sword definitions, loot boundaries, and simulated persistence lifecycle. Studio fixtures cover base spawn, real Tool combat and invalid requests, every boss mechanic, shield accounting, payouts, shop validation, armor, teleport timing, desktop mouse and `B` controls, and portrait phone layout. The natural deadline transition verified the final-five-second HUD lock and its unlock when Glacius spawned. See `docs/VERIFICATION.md` for details.
+All 30 source files compile. Automated checks cover the six exact sword definitions, loot boundaries, and simulated persistence lifecycle. Studio fixtures cover base spawn, real Tool combat and invalid requests, every boss mechanic, shield accounting, payouts, shop validation, armor, teleport timing, desktop mouse and `B` controls, and portrait phone layout. The natural deadline transition verified the final-five-second HUD lock and its unlock when Glacius spawned. See `docs/VERIFICATION.md` for details.
 
 Live published-server DataStore save/rejoin and a real multiplayer session were not tested. The persistence suite uses simulated services, and unpublished Studio correctly remains session-only.
 
@@ -79,3 +79,9 @@ Run the four Lune checks listed in [the delivery notes](docs/HANDOFF.md). Tool v
 The coin pools are 1,000 for Emberhorn and 1,400 for Glacius. Zero damage earns zero coins. The exact rare chance is `min(0.08, 0.02 + (share - 0.10) * 0.08)` for eligible contributors, with one roll per boss. Emberhorn drops its Cleaver or Molten Plate; Glacius drops Glacial Edge or Frostweave Cloak.
 
 Next validation: published DataStore save/rejoin and a six-player session, followed by balance and performance tuning from real play. No additional boss or monetization systems are included.
+
+## Visual refinement
+
+The arena is now grounded in a landscaped valley with limestone causeways, terraces and gateways, planted groves, and a six-face sunset sky. The original mint, teal, gold and player accents remain. Cleaner Builder Sans typography, animated button feedback and quiet UI sounds replace the oversized cartoon styling.
+
+Each boss has its own looping theme with crossfades. Music and reduced-motion controls are in the inventory footer. Tune presentation in UIDefs, AudioDefs, EnvironmentDefs and SkyDefs. See [music credits](docs/music.md) and [map details](docs/map-refinement.md).

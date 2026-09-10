@@ -25,7 +25,7 @@ remote.OnClientEvent:Connect(function(d)
 end)
 RunService:BindToRenderStep("ColossusImpactShake",Enum.RenderPriority.Camera.Value+1,function()
  local c=workspace.CurrentCamera
- if c and c.CameraType~=Enum.CameraType.Scriptable and os.clock()<shakeUntil then
+ if c and player:GetAttribute("ReducedMotion") ~= true and c.CameraType~=Enum.CameraType.Scriptable and os.clock()<shakeUntil then
   local fade=(shakeUntil-os.clock())/Config.Polish.ShakeDuration
   c.CFrame*=CFrame.new(math.sin(os.clock()*75)*Config.Polish.ShakeMagnitude*fade,math.cos(os.clock()*67)*Config.Polish.ShakeMagnitude*fade,0)
  end

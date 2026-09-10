@@ -54,7 +54,7 @@ damageRemote.OnClientEvent:Connect(function(position, dealt, userId)
 	local label = Instance.new("TextLabel")
 	label.BackgroundTransparency = 1
 	label.Size = UDim2.fromScale(1, 1)
-	label.Font = Enum.Font.GothamBlack
+	label.Font = Enum.Font.BuilderSansBold
 	label.Text = tostring(math.floor(dealt + 0.5))
 	label.TextColor3 = Color3.fromRGB(255, 235, 103)
 	label.TextStrokeColor3 = Color3.fromRGB(72, 25, 15)

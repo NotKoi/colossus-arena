@@ -24,7 +24,7 @@ end
 local function caption(parent,pos,text,color)
  local anchor=part(parent,color);anchor.Transparency=1;anchor.Size=Vector3.one;anchor.Position=Vector3.new(pos.X,4,pos.Z)
  local g=Instance.new("BillboardGui");g.Size=UDim2.fromScale(18,3);g.AlwaysOnTop=true;g.MaxDistance=250;g.Parent=anchor
- local t=Instance.new("TextLabel");t.Size=UDim2.fromScale(1,1);t.BackgroundColor3=Color3.fromRGB(25,43,62);t.BackgroundTransparency=.15;t.TextColor3=Color3.new(1,1,1);t.TextScaled=true;t.Font=Enum.Font.GothamBlack;t.Text=text;t.Parent=g
+ local t=Instance.new("TextLabel");t.Size=UDim2.fromScale(1,1);t.BackgroundColor3=Color3.fromRGB(25,43,62);t.BackgroundTransparency=.15;t.TextColor3=Color3.new(1,1,1);t.TextScaled=true;t.Font=Enum.Font.BuilderSansBold;t.Text=text;t.Parent=g
  local corner=Instance.new("UICorner");corner.CornerRadius=UDim.new(.2,0);corner.Parent=t
 end
 remote.OnClientEvent:Connect(function(d)

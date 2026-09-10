@@ -1,0 +1,37 @@
+-- Presentation-only valley settings. Gameplay dimensions remain in Config.Map.
+return {
+	Revision = 4,
+	Palette = {
+		Stone = Color3.fromRGB(211, 202, 151),
+		Limestone = Color3.fromRGB(222, 215, 180),
+		Mint = Color3.fromRGB(151, 198, 161),
+		Teal = Color3.fromRGB(55, 158, 153),
+		Gold = Color3.fromRGB(244, 191, 77),
+		Grass = Color3.fromRGB(119, 160, 106),
+		Earth = Color3.fromRGB(114, 121, 97),
+		Foothill = Color3.fromRGB(113, 143, 125),
+		Mountain = Color3.fromRGB(137, 160, 161),
+		DistantMountain = Color3.fromRGB(166, 185, 183),
+		Lantern = Color3.fromRGB(255, 224, 158),
+	},
+	Ground = { TileSize = 1200, TileRadius = 1, Depth = 90, Top = -1.2 },
+	Foothills = { Count = 13, Radius = 740, Width = 460, Height = 72, Depth = 330 },
+	Mountains = { Count = 10, Radius = 1160, Width = 480, Height = 170, Depth = 270 },
+	DistantMountains = { Count = 11, Radius = 1460, Width = 530, Height = 280, Depth = 270 },
+	Landscape = { Seed = 9162, Clusters = 12, Radius = 360, RadiusVariation = 65, MoundWidth = 110, MoundHeight = 15, MoundDepth = 78 },
+	Causeway = { InlayWidth = 0.65, EdgeWidth = 0.5, JointSpacing = 12.5 },
+	Architecture = {
+		LanternHeight = 7, LanternRange = 15, LanternBrightness = 0.6, FoundationDepth = 12,
+		TerraceSegments = 96, TerraceWidth = 6, OuterTerraceWidth = 4,
+		GateRadiusOffset = 5, GateSideOffset = 12.5, GateHeight = 10.5, GateWidth = 3,
+		GateFootWidth = 5, ButtressWidth = 5, ButtressHeight = 4, CapThickness = 0.2,
+	},
+	Sky = {
+		ClockTime = 15.1, Brightness = 2.4,
+		Ambient = Color3.fromRGB(124, 145, 150),
+		OutdoorAmbient = Color3.fromRGB(154, 171, 170),
+		Density = 0.2, Offset = 0.18, Haze = 1.1, Glare = 0.12,
+		Color = Color3.fromRGB(190, 218, 234), Decay = Color3.fromRGB(185, 206, 217),
+		CloudCover = 0.48, CloudDensity = 0.55, CloudColor = Color3.fromRGB(250, 246, 232),
+	},
+}

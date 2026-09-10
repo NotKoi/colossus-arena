@@ -25,3 +25,11 @@ Desktop mouse inventory open/close and B shortcut passed. iPhone 14 portrait HUD
 Final map overview and phone inventory screenshots inspected. Normal early-kill downtime reached the five-second UI lock, then Glacius spawned and teleport unlocked. Reoriented equipped blade dealt exactly 10 damage. Impact particle emitter creation verified. A diagnostic event initially omitted the required start timestamp; that fixture error was isolated and the final session restarted. Static imported tree is script-free; Rojo build succeeds with the asset included.
 
 Final validation: all 24 Luau sources compile; sword, loot and simulated persistence suites pass. Final Rojo XML contains exactly 24 source scripts and the two audited mesh parts, with no ManualBossTests hooks. Clean restart plus valid timestamped impact packet produced no console warnings/errors; impact anchor cleanup passed.
+
+## September 10 visual refinement
+
+30 sources compile; exact sword stats, loot boundaries and simulated persistence suites pass. Studio starts without warnings or errors. Desktop and iPhone14 portrait screenshots inspected for map, inventory, health depletion and disabled teleport. All34 HUD GuiObjects tested use scale-only dimensions/positions. Six base spawns/kiosks remain present; raycasts along all six causeway corridors found no obstruction from new masonry.
+
+Actual mouse hover produced scale1.025 and focus stroke transparency0.35; hover/click sound assets loaded. Actual music-button click muted/stopped the active theme. Motion control restored scale1 and disables impact shake. Both boss tracks loaded; state-driven playback, rapid crossfade cancellation and downtime stop assertions passed. Review caught shared sound cooldown and HP-label contrast; per-kind cooldowns and a contrasting empty-health track fixed these.
+
+Presentation-only test attributes were client-local and discarded on restart. Studio Edit rebuilds require fresh ModuleScript clones because tool-side require caches older Config values; final gameplay uses a fresh runtime. Published music permissions, live DataStore rejoin and physical low-end/multiplayer performance remain unverified.
