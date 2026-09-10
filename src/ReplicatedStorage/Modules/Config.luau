@@ -41,4 +41,5 @@ Config.Cycle = { Length = 120, HPPerPlayer = 0.6, CorpseLifetime = 4, TeleportLo
 Config.Player = { MaxHealth = 100, WalkSpeed = 24, JumpPower = 50, ArenaArrival = Vector3.new(95, 4, 0) }
 Config.Combat = { Range = 14, SwingWindow = 0.28, RemoteInterval = 0.08, ContactCooldown = 1 }
 Config.Effects = { Lifetime = 3, GroundY = 0.18, RingSegments = 72 }
+Config.Shop = { Range = 16, RequestInterval = .25, TeleportInterval = 1, SyncInterval = 1, ItemIdLimit = 64, StrengthTiers = {20,40,60,100,150,200} }
 return Config

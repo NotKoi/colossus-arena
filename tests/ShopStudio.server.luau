@@ -1,0 +1,30 @@
+local Data=require(game.ServerScriptService.DataService)
+local Shop=require(game.ServerScriptService.ShopService)
+local B=require(game.ServerScriptService.BossController)
+local p=game.Players:GetPlayers()[1];local profile
+repeat task.wait(.1);profile=Data.Get(p) until profile
+profile.coins=2000
+assert(not Shop.Buy(p,"BronzeShortblade"),"remote purchase from far spawn denied")
+local base=workspace.ColossusMap.Bases["Base"..p:GetAttribute("BaseIndex")]
+p.Character:PivotTo(base.UpgradeKiosk.CFrame*CFrame.new(0,3,7));task.wait(.3)
+assert(Shop.Buy(p,"BronzeShortblade"),"kiosk purchase")
+assert(profile.coins==1750 and profile.owned.BronzeShortblade and profile.equipped=="BronzeShortblade","price, ownership and equip")
+assert(not Shop.Buy(p,"KnightLongsword"),"purchase rate limit")
+task.wait(.3);assert(not Shop.Buy(p,"GlacialEdge"),"boss gear not sold")
+task.wait(.3);assert(not Shop.Buy(p,"SunfangGreatsword"),"insufficient funds")
+assert(not Shop.Equip(p,"GlacialEdge"),"unowned equip rejected")
+Data.Grant(p,"MoltenPlate");Data.Grant(p,"FrostweaveCloak");task.wait(.3)
+assert(Shop.Equip(p,"MoltenPlate"));local h=p.Character.Humanoid
+assert(h.MaxHealth==130,"armor health")
+task.wait(.3);assert(Shop.Equip(p,"FrostweaveCloak"));assert(math.abs(h.WalkSpeed-27.6)<.01,"cloak15%")
+assert(math.abs(p:GetAttribute("Strength")-81)<.01,"36DPS+30HP+15speed rating")
+h.Health=50;task.wait(.3);Shop.Equip(p,"MoltenPlate");task.wait(.3);Shop.Equip(p,"MoltenPlate");assert(h.Health<60,"armor toggling cannot heal")
+assert(Shop.Teleport(p),"base to arena")
+assert(Vector3.new(p.Character:GetPivot().X,0,p.Character:GetPivot().Z).Magnitude<120)
+assert(not Shop.Teleport(p),"teleport rate limit")
+task.wait(1.1);assert(Shop.Teleport(p),"arena to base")
+local state=game.ReplicatedStorage.BossState;state:SetAttribute("Active",false);state:SetAttribute("Deadline",workspace:GetServerTimeNow()+4)
+task.wait(1.1);assert(not Shop.Teleport(p),"last5second lock")
+state:SetAttribute("Active",true);state:SetAttribute("Deadline",workspace:GetServerTimeNow()+100)
+workspace:SetAttribute("ShopTest","PASS range, prices, ownership, rate limits, armor, strength and teleport lock")
+Data.Send(p);print("Shop and inventory runtime tests passed")
